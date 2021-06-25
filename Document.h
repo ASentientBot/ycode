@@ -2,8 +2,8 @@
 
 @interface Document:NSDocument
 
-@property NSURL* cachedURL;
-@property WindowController* windowController;
+@property(retain) NSURL* cachedURL;
+@property(retain) WindowController* windowController;
 
 @end
 

@@ -7,3 +7,13 @@ const BOOL WRAP=true;
 const int WRAP_INDENT=0;
 const BOOL WRAP_ON_WORDS=false;
 const BOOL SHOW_LINE_NUMBERS=true;
+
+NSDictionary<NSString*,NSString*>* LANGUAGE_FALLBACKS()
+{
+	NSMutableDictionary* result=NSMutableDictionary.alloc.init;
+	
+	// ActionScript
+	result[@"as"]=@"Xcode.SourceCodeLanguage.JavaScript";
+	
+	return result.autorelease;
+}

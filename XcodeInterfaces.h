@@ -23,31 +23,33 @@
 @end
 
 @interface DVTSourceCodeLanguage:NSObject
++(NSMutableSet<DVTSourceCodeLanguage*>*)sourceCodeLanguages;
 +(instancetype)sourceCodeLanguageForFileDataType:(DVTFileDataType*)type;
++(instancetype)sourceCodeLanguageWithIdentifier:(NSString*)identifier;
 @end
 
 @interface DVTSourceTextView:NSTextView
-@property BOOL wrapsLines;
+@property(assign) BOOL wrapsLines;
 -(void)shiftRight:(id)sender;
 -(void)shiftLeft:(id)sender;
 @end
 
 @interface DVTTextStorage:NSTextStorage
-@property DVTSourceCodeLanguage* language;
-@property BOOL usesTabs;
-@property int wrappedLineIndentWidth;
+@property(retain) DVTSourceCodeLanguage* language;
+@property(assign) BOOL usesTabs;
+@property(assign) int wrappedLineIndentWidth;
 @end
 
 @interface DVTTextSidebarView:NSRulerView
-@property BOOL drawsLineNumbers;
+@property(assign) BOOL drawsLineNumbers;
 @end
 
 @interface DVTTextPreferences:NSObject
 +(DVTTextPreferences*)sharedPreferences;
-@property BOOL enableTypeOverCompletions;
-@property BOOL useSyntaxAwareIndenting;
-@property BOOL autoInsertClosingBrace;
-@property BOOL autoInsertOpenBracket;
+@property(assign) BOOL enableTypeOverCompletions;
+@property(assign) BOOL useSyntaxAwareIndenting;
+@property(assign) BOOL autoInsertClosingBrace;
+@property(assign) BOOL autoInsertOpenBracket;
 @end
 
 @interface DVTSourceTextScrollView:NSScrollView

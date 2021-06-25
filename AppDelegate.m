@@ -6,7 +6,8 @@ NSMenu* makeMenu(NSMenu* parentMenu,NSString* title)
 	NSMenuItem* dropdownMenuItem=NSMenuItem.new;
 	[dropdownMenuItem setSubmenu:dropdownMenu];
 	[parentMenu addItem:dropdownMenuItem];
-	return dropdownMenu;
+	dropdownMenuItem.release;
+	return dropdownMenu.autorelease;
 }
 
 NSMenuItem* addMenuItem(NSMenu* parentMenu,NSString* name,id target,SEL selector,NSString* key,NSEventModifierFlags mask,NSInteger tag)
@@ -16,7 +17,7 @@ NSMenuItem* addMenuItem(NSMenu* parentMenu,NSString* name,id target,SEL selector
 	menuItem.target=target;
 	menuItem.tag=tag;
 	[parentMenu addItem:menuItem];
-	return menuItem;
+	return menuItem.autorelease;
 }
 
 void addMenuSeparator(NSMenu* parentMenu)
@@ -63,6 +64,7 @@ void addMenuSeparator(NSMenu* parentMenu)
 	addMenuItem(viewMenu,@"Enter Full Screen",nil,@selector(toggleFullScreen:),@"f",NSEventModifierFlagCommand|NSEventModifierFlagControl,0);
 	
 	NSApp.mainMenu=menuBar;
+	menuBar.release;
 	
 	[NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown handler:^NSEvent*(NSEvent* event)
 	{

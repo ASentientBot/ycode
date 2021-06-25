@@ -10,13 +10,23 @@
 	
 	NSRect windowRect=NSMakeRect(0,0,500,500);
 	NSWindowStyleMask windowStyle=NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable;
-	self.window=[NSWindow.alloc initWithContentRect:windowRect styleMask:windowStyle backing:NSBackingStoreBuffered defer:false];
-	self.window.tabbingMode=NSWindowTabbingModePreferred;
+	NSWindow* window=[NSWindow.alloc initWithContentRect:windowRect styleMask:windowStyle backing:NSBackingStoreBuffered defer:false];
+	window.tabbingMode=NSWindowTabbingModePreferred;
+	self.window=window;
+	window.release;
 	
-	self.view=[XcodeView.alloc initWithFrame:self.window.frame];
-	self.window.contentView=self.view;
+	XcodeView* view=[XcodeView.alloc initWithFrame:self.window.frame];
+	self.view=view;
+	window.contentView=view;
+	view.release;
 	
 	return self;
+}
+
+-(void)dealloc
+{
+	self.view.release;
+	super.dealloc;
 }
 
 @end

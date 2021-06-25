@@ -36,18 +36,31 @@ dispatch_once_t frameworkInitPredicate;
 	}
 	
 	self.codeStorage=[DVTTextStorage.alloc initWithString:codeString];
+	self.codeStorage.release;
 	
 	if(codeURL)
 	{
 		DVTFilePath* codeFile=[DVTFilePath filePathForFileURL:codeURL];
 		DVTFileDataType* codeType=[DVTFileDataType fileDataTypeForFilePath:codeFile error:nil];
-		self.codeStorage.language=[DVTSourceCodeLanguage sourceCodeLanguageForFileDataType:codeType];
+		DVTSourceCodeLanguage* language=[DVTSourceCodeLanguage sourceCodeLanguageForFileDataType:codeType];
+		
+		if(!language)
+		{
+			NSString* identifier=LANGUAGE_FALLBACKS()[codeURL.pathExtension];
+			if(identifier)
+			{
+				language=[DVTSourceCodeLanguage sourceCodeLanguageWithIdentifier:identifier];
+			}
+		}
+		
+		self.codeStorage.language=language;
 	}
 	
 	self.codeStorage.usesTabs=USE_TABS;
 	self.codeStorage.wrappedLineIndentWidth=WRAP_INDENT;
 	
 	self.codeView=DVTSourceTextView.alloc.init;
+	self.codeView.release;
 	[self.codeView.layoutManager replaceTextStorage:self.codeStorage];
 	self.codeView.horizontallyResizable=true;
 	self.codeView.wrapsLines=WRAP;
@@ -58,6 +71,7 @@ dispatch_once_t frameworkInitPredicate;
 	if(!WRAP_ON_WORDS)
 	{
 		self.codeView.layoutManager.typesetter=XcodeWrapAnywhereTypesetter.alloc.init;
+		self.codeView.layoutManager.typesetter.release;
 	}
 	
 	self.documentView=self.codeView;
@@ -69,6 +83,7 @@ dispatch_once_t frameworkInitPredicate;
 		DVTTextSidebarView* sidebarView=[DVTTextSidebarView.alloc initWithScrollView:self orientation:NSVerticalRuler];
 		sidebarView.drawsLineNumbers=true;
 		self.verticalRulerView=sidebarView;
+		sidebarView.release;
 		self.hasVerticalRuler=true;
 		self.rulersVisible=true;
 	}
@@ -111,6 +126,13 @@ dispatch_once_t frameworkInitPredicate;
 	}
 	
 	return true;
+}
+
+-(void)dealloc
+{
+	self.codeStorage.release;
+	self.codeView.release;
+	super.dealloc;
 }
 
 @end

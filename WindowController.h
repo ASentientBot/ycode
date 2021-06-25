@@ -2,7 +2,7 @@
 
 @interface WindowController:NSWindowController
 
-@property XcodeView* view;
+@property(strong) XcodeView* view;
 
 -(instancetype)init;
 

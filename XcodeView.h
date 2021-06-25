@@ -1,13 +1,13 @@
 #import "XcodeViewSettings.h"
 
-#import "XcodeInterfaces.m"
+#import "XcodeInterfaces.h"
 #import "XcodeWrapAnywhereTypesetter.m"
 
 @interface XcodeView:DVTSourceTextScrollView
 
-@property DVTTextStorage* codeStorage;
-@property DVTSourceTextView* codeView;
-@property BOOL hasBeenSaved;
+@property(retain) DVTTextStorage* codeStorage;
+@property(retain) DVTSourceTextView* codeView;
+@property(assign) BOOL hasBeenSaved;
 
 -(instancetype)initWithFrame:(NSRect)rect;
 -(void)loadURL:(NSURL*)codeURL;

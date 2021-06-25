@@ -4,7 +4,9 @@
 
 -(void)makeWindowControllers
 {
-	self.windowController=WindowController.alloc.init;
+	WindowController* controller=WindowController.alloc.init;
+	self.windowController=controller;
+	controller.release;
 	
 	if(self.cachedURL)
 	{
@@ -16,7 +18,7 @@
 
 -(BOOL)readFromURL:(NSURL*)fileURL ofType:(NSString*)fileType error:(NSError**)error
 {
-	self.cachedURL=fileURL;
+	self.cachedURL=fileURL.copy;
 	return true;
 }
 
@@ -24,6 +26,13 @@
 {
 	[self.windowController.view saveURL:fileURL];
 	return true;
+}
+
+-(void)dealloc
+{
+	self.windowController.release;
+	self.cachedURL.release;
+	super.dealloc;
 }
 
 @end

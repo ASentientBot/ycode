@@ -16,7 +16,7 @@ rm -rf "$appPath"
 mkdir -p "$appPath/Contents/MacOS"
 mkdir -p "$appPath/Contents/Resources"
 
-clang -fmodules -fobjc-arc -Wno-unused-getter-return-value $frameworkFlags "$inPath" -o "$appPath/Contents/MacOS/$name"
+clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$appPath/Contents/MacOS/$name"
 
 plistPath="$appPath/Contents/Info.plist"
 defaults write "$plistPath" CFBundleExecutable "$name"
