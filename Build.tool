@@ -16,7 +16,22 @@ rm -rf "$appPath"
 mkdir -p "$appPath/Contents/MacOS"
 mkdir -p "$appPath/Contents/Resources"
 
-clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$appPath/Contents/MacOS/$name"
+if [[ -z "$NO_UNIVERSAL" ]] ; then
+    clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$PWD/$name-amd64" -target x86_64-apple-macos10.13
+    clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$PWD/$name-arm64" -target arm64-apple-macos11
+    lipo -create -output "$appPath/Contents/MacOS/$name" "$PWD/$name-amd64" "$PWD/$name-arm64"
+    
+    rm -rf "$PWD/$name-amd64"
+    rm -rf "$PWD/$name-arm64"
+
+else
+    echo "Compatibility mode enabled!"
+    if [[ $(uname -m) != "arm64" ]]; then
+        clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$appPath/Contents/MacOS/$name" -target x86_64-apple-macos10.13
+    else
+        clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$appPath/Contents/MacOS/$name" -target arm64-apple-macos11
+    fi
+fi
 
 plistPath="$appPath/Contents/Info.plist"
 defaults write "$plistPath" CFBundleExecutable "$name"
