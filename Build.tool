@@ -16,7 +16,12 @@ rm -rf "$appPath"
 mkdir -p "$appPath/Contents/MacOS"
 mkdir -p "$appPath/Contents/Resources"
 
-clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$appPath/Contents/MacOS/$name"
+clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$PWD/$name-amd64" -target x86_64-apple-macos10.12
+clang -fmodules -Wno-unused-getter-return-value -Wno-objc-missing-super-calls $frameworkFlags "$inPath" -o "$PWD/$name-arm64" -target arm64-apple-macos11
+lipo -create -output "$appPath/Contents/MacOS/$name" "$PWD/$name-amd64" "$PWD/$name-arm64"
+
+rm -rf "$PWD/$name-amd64"
+rm -rf "$PWD/$name-arm64"
 
 plistPath="$appPath/Contents/Info.plist"
 defaults write "$plistPath" CFBundleExecutable "$name"
