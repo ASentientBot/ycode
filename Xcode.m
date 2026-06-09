@@ -1,12 +1,29 @@
-id hackReturnNil()
-{
-	return nil;
-}
-
 NSMenu* hackContextMenu()
 {
 	return contextMenuHook();
 }
+
+@interface NSDocumentController(YcodeHack)
+@end
+
+@implementation NSDocumentController(YcodeHack)
+
+-(BOOL)isKindOfClass:(Class)class
+{
+	if([NSStringFromClass(class) isEqual:@"IDEDocumentController"])
+	{
+		return true;
+	}
+	
+	return [super isKindOfClass:class];
+}
+
+-(id)workspaceDocuments
+{
+	return nil;
+}
+
+@end
 
 @implementation Xcode
 
@@ -325,7 +342,6 @@ NSMenu* hackContextMenu()
 	
 	// TODO: stupid
 	
-	[Xcode swizzleWithClass:@"IDEDocumentController" selector:@"sharedDocumentController" isInstance:false implementation:(IMP)hackReturnNil];
 	[Xcode swizzleWithClass:@"_TtC12SourceEditor16SourceEditorView" selector:@"menuForEvent:" isInstance:true implementation:(IMP)hackContextMenu];
 	
 	// TODO: aborts if Xcode present but never opened
