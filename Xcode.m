@@ -1,22 +1,7 @@
-NSMenu* hackContextMenu()
-{
-	return contextMenuHook();
-}
-
-@interface NSDocumentController(YcodeHack)
+@interface FakeDocumentController:NSObject
 @end
 
-@implementation NSDocumentController(YcodeHack)
-
--(BOOL)isKindOfClass:(Class)class
-{
-	if([NSStringFromClass(class) isEqual:@"IDEDocumentController"])
-	{
-		return true;
-	}
-	
-	return [super isKindOfClass:class];
-}
+@implementation FakeDocumentController
 
 -(id)workspaceDocuments
 {
@@ -24,6 +9,28 @@ NSMenu* hackContextMenu()
 }
 
 @end
+
+BOOL mightNeedFakeDocumentController=true;
+
+NSObject* hackDocumentController()
+{
+	if(@available(macOS 27,*))
+	{
+		if(mightNeedFakeDocumentController&&[NSThread.callStackSymbols[1] containsString:@"$s6IDEKit35IDEWorkspaceThemeOverrideDataSourceC15installIfNeeded33_EC2B2934FA8B952E633945C4050A3FA5LLyyFZ"])
+		{
+			return FakeDocumentController.alloc.init.autorelease;
+		}
+		
+		mightNeedFakeDocumentController=false;
+	}
+
+	return nil;
+}
+
+NSMenu* hackContextMenu()
+{
+	return contextMenuHook();
+}
 
 @implementation Xcode
 
@@ -341,6 +348,8 @@ NSMenu* hackContextMenu()
 	SoftDocumentLocation=[Xcode linkClass:@"DVTTextDocumentLocation"];
 	
 	// TODO: stupid
+	
+	[Xcode swizzleWithClass:@"IDEDocumentController" selector:@"sharedDocumentController" isInstance:false implementation:(IMP)hackDocumentController];
 	
 	[Xcode swizzleWithClass:@"_TtC12SourceEditor16SourceEditorView" selector:@"menuForEvent:" isInstance:true implementation:(IMP)hackContextMenu];
 	
