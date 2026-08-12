@@ -17,9 +17,9 @@
 #define AmyThemeStringColor @"0.8 0.3 1"
 #define AmyThemeNumberColor @"0.5 0.3 1"
 
-#define AmyThemeRegularFont @"SFMono-Regular - 12"
-#define AmyThemeItalicFont @"SFMono-RegularItalic - 12"
-#define AmyThemeBoldFont @"SFMono-Bold - 12"
+#define AmyThemeRegularFont @"SFMono-Regular - 11"
+#define AmyThemeItalicFont @"SFMono-RegularItalic - 11"
+#define AmyThemeBoldFont @"SFMono-Medium - 11"
 
 #define AmyThemeTerminalFont @"SFMono-Regular"
 #define AmyThemeTerminalFontSize 11

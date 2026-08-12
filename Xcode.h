@@ -46,6 +46,7 @@
 #define XcodeThemeKeywordKeys @[@"xcode.syntax.keyword"]
 #define XcodeThemeStringKeys @[@"xcode.syntax.string"]
 #define XcodeThemeNumberKeys @[@"xcode.syntax.number",@"xcode.syntax.character"]
+#define XcodeThemeLineHeightKey @"DVTLineSpacing"
 
 @class XcodeThemeManager;
 

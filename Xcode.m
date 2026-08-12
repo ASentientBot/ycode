@@ -207,6 +207,8 @@ NSMenu* hackContextMenu()
 	custom[XcodeThemeInvisiblesKey]=commentColor;
 	custom[XcodeThemeMarkdownCodeKey]=stringColor;
 	
+	custom[XcodeThemeLineHeightKey]=@1;
+	
 	NSMutableDictionary* innerFonts=custom[XcodeThemeFontsKey];
 	NSMutableDictionary* innerColors=custom[XcodeThemeColorsKey];
 	for(NSString* key in innerColors.allKeys)
